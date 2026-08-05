@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sugar & Bloom | Handcrafted Cakes</title>
+<style>
+  :root{
+    --pink: #e8a0b4;
+    --pink-dark: #d47590;
+    --cream: #fdf6f0;
+    --cream-dark: #f7e9dd;
+    --brown: #5c3d3a;
+    --brown-light: #8a6a63;
+    --gold: #d4a373;
+    --white: #ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--cream);
+    color: var(--brown);
+    line-height: 1.6;
+  }
+  h1,h2,h3{ font-family: 'Georgia', serif; font-weight: normal; }
+  a{ color: inherit; }
+
+  /* NAV */
+  nav{
+    position: sticky; top:0; z-index: 100;
+    background: rgba(253,246,240,0.95);
+    backdrop-filter: blur(6px);
+    display:flex; justify-content:center; gap: 2rem;
+    padding: 1rem; border-bottom: 1px solid var(--cream-dark);
+    flex-wrap: wrap;
+  }
+  nav a{
+    text-decoration:none; color: var(--brown); font-size: 0.95rem;
+    letter-spacing: 1px; text-transform: uppercase; font-family: sans-serif;
+    padding: 0.3rem 0.6rem; border-bottom: 2px solid transparent;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  nav a:hover{ border-color: var(--pink-dark); color: var(--pink-dark); }
+
+  /* HERO */
+  header.hero{
+    min-height: 78vh;
+    display:flex; flex-direction: column; align-items:center; justify-content:center;
+    text-align:center; padding: 3rem 1.5rem;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(232,160,180,0.35), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(212,163,115,0.25), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(232,160,180,0.25), transparent 50%),
+      linear-gradient(180deg, var(--cream), var(--cream-dark));
+  }
+  .hero-emoji{ font-size: 3.5rem; margin-bottom: 1rem; }
+  header.hero h1{
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--pink-dark);
+    letter-spacing: 2px;
+  }
+  header.hero p.tagline{
+    margin-top: 1rem;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-style: italic;
+    color: var(--brown-light);
+  }
+  .hero-buttons{ margin-top: 2.2rem; display:flex; gap: 1rem; flex-wrap: wrap; justify-content:center; }
+  .btn{
+    display:inline-block; padding: 0.85rem 1.8rem; border-radius: 50px;
+    text-decoration:none; font-family: sans-serif; font-size: 0.95rem;
+    letter-spacing: 0.5px; cursor:pointer; border: 2px solid var(--pink-dark);
+    transition: all 0.25s;
+  }
+  .btn-solid{ background: var(--pink-dark); color: white; }
+  .btn-solid:hover{ background: var(--brown); border-color: var(--brown); }
+  .btn-outline{ background: transparent; color: var(--pink-dark); }
+  .btn-outline:hover{ background: var(--pink-dark); color: white; }
+
+  section{ padding: 5rem 1.5rem; max-width: 1000px; margin: 0 auto; }
+  .section-title{
+    text-align:center; font-size: clamp(2rem, 4vw, 2.6rem);
+    color: var(--pink-dark); margin-bottom: 0.5rem;
+  }
+  .section-sub{
+    text-align:center; color: var(--brown-light); margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  /* QUIZ */
+  #quiz{ background: var(--white); border-radius: 24px; box-shadow: 0 10px 40px rgba(92,61,58,0.08); }
+  .quiz-box{
+    max-width: 600px; margin: 0 auto; text-align:center;
+    min-height: 320px; display:flex; flex-direction:column; justify-content:center;
+  }
+  .quiz-progress{
+    display:flex; justify-content:center; gap: 0.5rem; margin-bottom: 2rem;
+  }
+  .dot{ width: 10px; height:10px; border-radius:50%; background: var(--cream-dark); transition: background 0.3s; }
+  .dot.active{ background: var(--pink-dark); }
+  .dot.done{ background: var(--gold); }
+  .quiz-step{ display:none; animation: fadeIn 0.4s ease; }
+  .quiz-step.visible{ display:block; }
+  @keyframes fadeIn{ from{opacity:0; transform: translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  .quiz-step h3{ font-size: 1.6rem; margin-bottom: 1.8rem; color: var(--brown); }
+  .quiz-options{ display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width: 500px){ .quiz-options{ grid-template-columns: 1fr; } }
+  .quiz-option{
+    padding: 1rem; border: 2px solid var(--cream-dark); border-radius: 14px;
+    background: var(--cream); cursor:pointer; font-family: sans-serif; font-size: 1rem;
+    color: var(--brown); transition: all 0.2s;
+  }
+  .quiz-option:hover{ border-color: var(--pink-dark); background: var(--cream-dark); transform: translateY(-2px); }
+  .quiz-back{
+    margin-top: 1.5rem; background:none; border:none; color: var(--brown-light);
+    font-family: sans-serif; font-size: 0.85rem; cursor:pointer; text-decoration: underline;
+  }
+  .quiz-result{ display:none; }
+  .quiz-result.visible{ display:block; animation: fadeIn 0.5s ease; }
+  .result-card{
+    background: var(--cream); border-radius: 18px; padding: 2rem; margin-top: 1rem;
+    border: 2px dashed var(--gold);
+  }
+  .result-card h4{ font-size: 1.5rem; color: var(--pink-dark); margin-bottom: 0.5rem; }
+  .result-card .price{ font-family: sans-serif; font-weight:bold; color: var(--gold); font-size: 1.1rem; margin: 0.5rem 0; }
+  .quiz-retry{ margin-top: 1.5rem; }
+
+  /* MENU */
+  .menu-grid{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.8rem;
+  }
+  .menu-card{
+    background: var(--white); border-radius: 18px; padding: 1.8rem;
+    box-shadow: 0 6px 24px rgba(92,61,58,0.06); border-top: 4px solid var(--pink);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .menu-card:hover{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(92,61,58,0.12); }
+  .menu-card .cake-emoji{ font-size: 2.2rem; margin-bottom: 0.6rem; }
+  .menu-card h3{ font-size: 1.3rem; color: var(--brown); margin-bottom: 0.4rem; }
+  .menu-card p{ color: var(--brown-light); font-size: 0.95rem; margin-bottom: 0.8rem; }
+  .menu-card .price{ font-family: sans-serif; font-weight:bold; color: var(--pink-dark); font-size: 1.1rem; }
+
+  /* REVIEWS */
+  #reviews{ background: linear-gradient(180deg, var(--cream-dark), var(--cream)); border-radius: 24px; }
+  .reviews-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1.8rem; }
+  .review-card{
+    background: var(--white); border-radius: 16px; padding: 1.8rem;
+    box-shadow: 0 6px 20px rgba(92,61,58,0.06);
+  }
+  .review-card .stars{ color: var(--gold); font-size: 1.1rem; margin-bottom: 0.8rem; }
+  .review-card p.quote{ font-style: italic; color: var(--brown); margin-bottom: 1rem; }
+  .review-card p.name{ font-family: sans-serif; font-weight:bold; color: var(--pink-dark); font-size: 0.9rem; }
+
+  /* CONTACT */
+  .contact-wrap{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items:start;
+  }
+  @media(max-width: 700px){ .contact-wrap{ grid-template-columns: 1fr; } }
+  .contact-info h3{ color: var(--pink-dark); margin-bottom: 1rem; font-size: 1.4rem; }
+  .contact-info p{ margin-bottom: 0.6rem; font-family: sans-serif; color: var(--brown-light); }
+  .contact-info .label{ font-weight:bold; color: var(--brown); }
+  form{ display:flex; flex-direction: column; gap: 1rem; }
+  label{ font-family: sans-serif; font-size: 0.85rem; color: var(--brown-light); margin-bottom: 0.2rem; display:block; }
+  input, textarea{
+    width:100%; padding: 0.75rem; border-radius: 10px; border: 2px solid var(--cream-dark);
+    font-family: sans-serif; font-size: 0.95rem; background: var(--white); color: var(--brown);
+  }
+  input:focus, textarea:focus{ outline:none; border-color: var(--pink-dark); }
+  textarea{ resize: vertical; min-height: 100px; }
+  #formMsg{
+    display:none; background: var(--cream-dark); border-radius: 10px; padding: 1rem;
+    font-family: sans-serif; color: var(--brown); text-align:center;
+  }
+
+  footer{
+    text-align:center; padding: 2.5rem 1.5rem; background: var(--brown); color: var(--cream);
+    font-family: sans-serif; font-size: 0.85rem;
+  }
+  footer .heart{ color: var(--pink); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#quiz">Find My Cake</a>
+  <a href="#menu">Menu</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#contact">Order / Contact</a>
+</nav>
+
+<header class="hero">
+  <div class="hero-emoji">🌸🎂</div>
+  <h1>Sugar & Bloom</h1>
+  <p class="tagline">Handcrafted cakes for life's sweetest moments</p>
+  <div class="hero-buttons">
+    <a href="#quiz" class="btn btn-solid">Find My Perfect Cake</a>
+    <a href="#menu" class="btn btn-outline">View Menu</a>
+  </div>
+</header>
+
+<section id="quiz">
+  <h2 class="section-title">Find Your Perfect Cake</h2>
+  <p class="section-sub">Answer three quick questions and we'll suggest the perfect cake for you</p>
+
+  <div class="quiz-box">
+    <div class="quiz-progress">
+      <div class="dot" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+    </div>
+
+    <div class="quiz-step" id="step-1">
+      <h3>What's the occasion?</h3>
+      <div class="quiz-options">
+        <button class="quiz-option" data-q="occasion" data-v="Birthday">🎉 Birthday</button>
+        <button class="quiz-option" data-q="occasion" data-v="Wedding">💍 Wedding</button>
+        <button class="quiz-option" data-q="occasion" data-v="Anniversary">💕 Anniversary</button>
+        <button class="quiz-option" data-q="occasion" data-v="Just Because">✨ Just Because</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" id="step-2">
+      <h3>What flavor sounds good?</h3>
+      <div class="quiz-options">
+        <button class="quiz-option" data-q="flavor" data-v="Chocolate">🍫 Chocolate</button>
+        <button class="quiz-option" data-q="flavor" data-v="Vanilla">🌿 Vanilla</button>
+        <button class="quiz-option" data-q="flavor" data-v="Red Velvet">❤️ Red Velvet</button>
+        <button class="quiz-option" data-q="flavor" data-v="Lemon">🍋 Lemon</button>
+        <button class="quiz-option" data-q="flavor" data-v="Surprise Me">🎁 Surprise Me</button>
+      </div>
+      <button class="quiz-back" onclick="quizBack(2)">← Back</button>
+    </div>
+
+    <div class="quiz-step" id="step-3">
+      <h3>What's your budget?</h3>
+      <div class="quiz-options">
+        <button class="quiz-option" data-q="budget" data-v="Under $50">Under $50</button>
+        <button class="quiz-option" data-q="budget" data-v="$50–$100">$50 – $100</button>
+        <button class="quiz-option" data-q="budget" data-v="$100–$200">$100 – $200</button>
+        <button class="quiz-option" data-q="budget" data-v="$200+">$200+</button>
+      </div>
+      <button class="quiz-back" onclick="quizBack(3)">← Back</button>
+    </div>
+
+    <div class="quiz-result" id="quiz-result">
+      <h3>We recommend...</h3>
+      <div class="result-card">
+        <div class="cake-emoji" style="font-size:2rem;" id="result-emoji">🎂</div>
+        <h4 id="result-name"></h4>
+        <p id="result-desc" style="color:var(--brown-light);"></p>
+        <p class="price" id="result-price"></p>
+      </div>
+      <div class="quiz-retry">
+        <button class="btn btn-outline" onclick="quizReset()">Retake Quiz</button>
+        <a href="#contact" class="btn btn-solid">Order This Cake</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="menu">
+  <h2 class="section-title">Our Menu</h2>
+  <p class="section-sub">Every cake is baked fresh to order, from scratch</p>
+  <div class="menu-grid">
+    <div class="menu-card">
+      <div class="cake-emoji">🍫</div>
+      <h3>Midnight Chocolate Decadence</h3>
+      <p>Rich layers of dark chocolate cake with silky ganache and chocolate shavings.</p>
+      <div class="price">$65</div>
+    </div>
+    <div class="menu-card">
+      <div class="cake-emoji">🌿</div>
+      <h3>Classic Vanilla Bean</h3>
+      <p>Light vanilla bean sponge with Madagascar vanilla buttercream. A timeless favorite.</p>
+      <div class="price">$55</div>
+    </div>
+    <div class="menu-card">
+      <div class="cake-emoji">❤️</div>
+      <h3>Southern Red Velvet</h3>
+      <p>Velvety cocoa layers with tangy cream cheese frosting, finished with a red velvet crumb.</p>
+      <div class="price">$60</div>
+    </div>
+    <div class="menu-card">
+      <div class="cake-emoji">🍋</div>
+      <h3>Sunshine Lemon Bliss</h3>
+      <p>Zesty lemon cake with lemon curd filling and light lemon buttercream. Bright and fresh.</p>
+      <div class="price">$58</div>
+    </div>
+    <div class="menu-card">
+      <div class="cake-emoji">💍</div>
+      <h3>Bloom Wedding Tier</h3>
+      <p>A custom multi-tier masterpiece with sugar florals, tailored to your flavors and vision.</p>
+      <div class="price">From $220</div>
+    </div>
+    <div class="menu-card">
+      <div class="cake-emoji">🎉</div>
+      <h3>Confetti Celebration Cake</h3>
+      <p>Fun funfetti sponge with rainbow sprinkles and vanilla buttercream. A birthday classic.</p>
+      <div class="price">$62</div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <h2 class="section-title">What Our Customers Say</h2>
+  <p class="section-sub">Real reviews from real celebrations</p>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="quote">The wedding cake was more beautiful than I imagined, and it tasted even better. Every guest asked where we got it.</p>
+      <p class="name">— Amara J.</p>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="quote">I ordered the red velvet for my daughter's birthday and it disappeared in minutes. Moist, rich, and not too sweet.</p>
+      <p class="name">— Daniel P.</p>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="quote">Sugar & Bloom made our anniversary so special. The lemon cake was light, fresh, and absolutely gorgeous.</p>
+      <p class="name">— Priya & Sam</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">Order or Get in Touch</h2>
+  <p class="section-sub">Tell us about your event and we'll get back to you within 24 hours</p>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <h3>Visit or Reach Us</h3>
+      <p><span class="label">Address:</span> 123 Blossom Lane, Sweetville</p>
+      <p><span class="label">Phone:</span> (555) 012-3456</p>
+      <p><span class="label">Email:</span> hello@sugarandbloom.com</p>
+      <p><span class="label">Hours:</span> Tue–Sat, 9am–6pm</p>
+      <p style="margin-top:1.5rem;">We recommend ordering at least 1 week in advance, and 4+ weeks for wedding cakes.</p>
+    </div>
+    <form id="orderForm">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div>
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone">
+      </div>
+      <div>
+        <label for="date">Date Needed</label>
+        <input type="date" id="date">
+      </div>
+      <div>
+        <label for="message">Message / Order Details</label>
+        <textarea id="message" placeholder="Tell us about the occasion, flavor, size, and any special requests..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-solid">Send Order Request</button>
+      <div id="formMsg"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Sugar & Bloom Bakery. Made with <span class="heart">♥</span> and a lot of butter.</p>
+</footer>
+
+<script>
+  // ---- QUIZ LOGIC ----
+  const answers = { occasion: null, flavor: null, budget: null };
+  let currentStep = 1;
+
+  const cakeGuide = {
+    "Chocolate": { name: "Midnight Chocolate Decadence", desc: "Rich layers of dark chocolate cake with silky ganache and chocolate shavings.", price: "$65", emoji: "🍫" },
+    "Vanilla": { name: "Classic Vanilla Bean", desc: "Light vanilla bean sponge with Madagascar vanilla buttercream.", price: "$55", emoji: "🌿" },
+    "Red Velvet": { name: "Southern Red Velvet", desc: "Velvety cocoa layers with tangy cream cheese frosting.", price: "$60", emoji: "❤️" },
+    "Lemon": { name: "Sunshine Lemon Bliss", desc: "Zesty lemon cake with lemon curd filling and light lemon buttercream.", price: "$58", emoji: "🍋" }
+  };
+
+  function updateDots(){
+    for(let i=1;i<=3;i++){
+      const dot = document.getElementById('dot-'+i);
+      dot.classList.remove('active','done');
+      if(i < currentStep) dot.classList.add('done');
+      else if(i === currentStep) dot.classList.add('active');
+    }
+  }
+
+  function showStep(n){
+    document.querySelectorAll('.quiz-step').forEach(el => el.classList.remove('visible'));
+    document.getElementById('quiz-result').classList.remove('visible');
+    if(n <= 3){
+      document.getElementById('step-'+n).classList.add('visible');
+    }
+    currentStep = n;
+    updateDots();
+  }
+
+  function quizBack(fromStep){
+    showStep(fromStep - 1);
+  }
+
+  function quizReset(){
+    answers.occasion = null; answers.flavor = null; answers.budget = null;
+    showStep(1);
+  }
+
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.q;
+      const v = btn.dataset.v;
+      answers[q] = v;
+      if(q === 'occasion') showStep(2);
+      else if(q === 'flavor') showStep(3);
+      else if(q === 'budget') showResult();
+    });
+  });
+
+  function showResult(){
+    document.querySelectorAll('.quiz-step').forEach(el => el.classList.remove('visible'));
+    for(let i=1;i<=3;i++){ document.getElementById('dot-'+i).classList.add('done'); document.getElementById('dot-'+i).classList.remove('active'); }
+
+    let pick;
+    if(answers.flavor === 'Surprise Me'){
+      const flavors = Object.keys(cakeGuide);
+      pick = cakeGuide[flavors[Math.floor(Math.random()*flavors.length)]];
+    } else {
+      pick = cakeGuide[answers.flavor];
+    }
+
+    let name = pick.name;
+    let desc = pick.desc;
+    let price = pick.price;
+    let emoji = pick.emoji;
+
+    // Special-case bigger occasions / budgets
+    if(answers.occasion === 'Wedding' || answers.budget === '$200+'){
+      name = "Bloom Wedding Tier (" + pick.name.split(' ')[0] + " " + (pick.name.includes('Flavor') ? '' : '') + pick.name + " inspired)";
+      name = "Bloom Wedding Tier";
+      desc = "A custom multi-tier cake featuring " + answers.flavor.toLowerCase() + " flavor with sugar florals, tailored to your vision.";
+      price = "From $220";
+      emoji = "💍";
+    }
+
+    document.getElementById('result-name').textContent = name;
+    document.getElementById('result-desc').textContent = desc + " Perfect for a " + answers.occasion.toLowerCase() + ", within your " + answers.budget + " budget.";
+    document.getElementById('result-price').textContent = price;
+    document.getElementById('result-emoji').textContent = emoji;
+
+    document.getElementById('quiz-result').classList.add('visible');
+  }
+
+  showStep(1);
+
+  // ---- CONTACT FORM ----
+  document.getElementById('orderForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const msg = document.getElementById('formMsg');
+    msg.style.display = 'block';
+    msg.textContent = "Thank you! Your order request has been noted. We'll be in touch within 24 hours. 🌸";
+    this.reset();
+  });
+</script>
+
+</body>
+</html>
